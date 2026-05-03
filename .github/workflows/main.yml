@@ -1,28 +1,35 @@
-name: Crear App VapeHouse
-on: [push]
+name: Build Windows Executable
+
+on:
+  push:
+    branches: [ "main" ] # Se ejecuta cada vez que subes algo a la rama main
+
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-latest # Usa un servidor con Windows para generar el .exe
+
     steps:
     - name: Checkout del código
       uses: actions/checkout@v4
-    
+
     - name: Configurar Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
-        
-    - name: Instalar PyInstaller
+        python-python-version: '3.10'
+
+    - name: Instalar dependencias
       run: |
         python -m pip install --upgrade pip
-        pip install pyinstaller
-        
-    - name: Crear el Ejecutable (.exe)
-      # Nota: Asegúrate de que tu archivo se llame main.py
-      run: pyinstaller --noconsole --onefile --name "VapeHouse_App" main.py
-      
-    - name: Subir el archivo final
+        pip install pyinstaller reportlab
+        # Si agregas más librerías en el futuro, lístalas aquí
+
+    - name: Generar ejecutable con PyInstaller
+      run: |
+        pyinstaller --noconsole --onefile --name "VapeHouse_SGE" "import tkinter as tk_2.txt"
+        # Nota: Asegúrate de que el nombre del archivo coincida exactamente con el de tu repositorio
+
+    - name: Subir ejecutable como artefacto
       uses: actions/upload-artifact@v4
       with:
-        name: VapeHouse-Ejecutable
-        path: dist/VapeHouse_App.exe
+        name: VapeHouse_SGE_Windows
+        path: dist/VapeHouse_SGE.exe
